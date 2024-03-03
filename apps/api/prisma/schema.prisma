@@ -99,12 +99,16 @@ model Exercise {
   id                String            @unique
   name              String
   target            TargetMuscle      @relation(fields: [targetMuscleId], references: [id])
-  targetMuscleId    String
+  targetMuscleId    String            @db.ObjectId
   secondaryMuscleId String[]          @db.ObjectId
   secondaryMuscles  SecondaryMuscle[] @relation(fields: [secondaryMuscleId], references: [id])
   instructions      String[]
   gifUrl            GifUrl?
   dbid              String
+  Equipment         Equipment         @relation(fields: [equipmentId], references: [id])
+  equipmentId       String            @db.ObjectId
+  bodyPart          BodyPart          @relation(fields: [bodyPartId], references: [id])
+  bodyPartId        String            @db.ObjectId
 }
 
 model GifUrl {
@@ -116,8 +120,20 @@ model GifUrl {
 }
 
 model TargetMuscle {
-  id       String     @id @default(cuid()) @map("_id")
+  id       String     @id @default(cuid()) @map("_id") @db.ObjectId
   muscle   String     @unique
+  exercise Exercise[]
+}
+
+model Equipment {
+  id        String     @id @default(cuid()) @map("_id") @db.ObjectId
+  equipment String     @unique
+  exercise  Exercise[]
+}
+
+model BodyPart {
+  id       String     @id @default(cuid()) @map("_id") @db.ObjectId
+  bodyPart String     @unique
   exercise Exercise[]
 }
 
@@ -132,5 +148,3 @@ enum UserRole {
   ADMIN
   USER
 }
-
-
