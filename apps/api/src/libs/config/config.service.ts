@@ -51,16 +51,16 @@ export class ConfigService implements Config {
     return this.configService.get<string>('SMTP_SERVICE_PASSWORD');
   }
 
-  get OAUTH_GOOGLE_CLIENT_ID(): string {
-    return this.configService.get<string>('OAUTH_GOOGLE_CLIENT_ID');
+  get GOOGLE_OAUTH_CLIENT_ID(): string {
+    return this.configService.get<string>('GOOGLE_OAUTH_CLIENT_ID');
   }
 
-  get OAUTH_GOOGLE_CLIENT_SECRET(): string {
-    return this.configService.get<string>('OAUTH_GOOGLE_CLIENT_SECRET');
+  get GOOGLE_OAUTH_CLIENT_SECRET(): string {
+    return this.configService.get<string>('GOOGLE_OAUTH_CLIENT_SECRET');
   }
 
-  get OAUTH_GOOGLE_CLIENT_CALLBACK(): string {
-    return this.configService.get<string>('OAUTH_GOOGLE_CLIENT_CALLBACK');
+  get GOOGLE_OAUTH_CLIENT_CALLBACK(): string {
+    return this.configService.get<string>('GOOGLE_OAUTH_CLIENT_CALLBACK');
   }
 
   get EXPRESS_SESSION_SECRET(): string {

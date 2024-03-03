@@ -14,21 +14,26 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
-  name          String?
-  email         String    @unique
-  image         String?
-  role          UserRole  @default(USER)
-  Account       Account[]
-  refreshTokens Refresh[]
+  id           String         @id @default(cuid()) @map("_id") @db.ObjectId
+  firstName    String?
+  lastName     String?
+  email        String         @unique
+  photoUrl     String?        @map("photo_url")
+  role         UserRole       @default(USER)
+  Account      Account[]
+  refreshToken RefreshToken[]
+  Apikeys      Apikeys[]
+  apiRequests  Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Account {
-  id                String  @id @default(cuid()) @map("_id")
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
+  id                String  @id @default(cuid()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String? // type of auth mechanism
+  provider          String?
+  providerAccountId String?
   refresh_token     String?
   access_token      String?
   expires_at        Int?
@@ -43,17 +48,89 @@ model Account {
   @@index([userId])
 }
 
-model Refresh {
-  id           String @id @default(cuid()) @map("_id")
+model RefreshToken {
+  id           String @id @default(cuid()) @map("_id") @db.ObjectId
   user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
+  userId       String @db.ObjectId
   refreshtoken String @unique
 
   @@index([userId])
   @@index([id])
 }
 
+model Apikeys {
+  id              String            @id @default(cuid()) @map("_id") @db.ObjectId
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String            @db.ObjectId
+  name            String            @unique
+  key             String            @unique
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ApiDailyStats   ApiDailyStats[]
+  ApiMonthlyStats ApiMonthlyStats[]
+}
+
+model ApiDailyStats {
+  id         String   @id @default(cuid()) @map("_id") @db.ObjectId
+  date       DateTime @unique
+  apiKeyId   String   @db.ObjectId
+  dailyUsage Int      @default(0)
+  apiKey     Apikeys  @relation(fields: [apiKeyId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([date, apiKeyId])
+}
+
+model ApiMonthlyStats {
+  id           String   @id @default(cuid()) @map("_id") @db.ObjectId
+  month        Int      @unique
+  apiKeyId     String   @db.ObjectId
+  monthlyUsage Int      @default(0)
+  apiKey       Apikeys  @relation(fields: [apiKeyId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([month, apiKeyId])
+}
+
+model Exercise {
+  exerciseId        String            @id @default(cuid()) @map("_id") @db.ObjectId
+  id                String            @unique
+  name              String
+  target            TargetMuscle      @relation(fields: [targetMuscleId], references: [id])
+  targetMuscleId    String
+  secondaryMuscleId String[]          @db.ObjectId
+  secondaryMuscles  SecondaryMuscle[] @relation(fields: [secondaryMuscleId], references: [id])
+  instructions      String[]
+  gifUrl            GifUrl?
+  dbid              String
+}
+
+model GifUrl {
+  id         String   @id @default(cuid()) @map("_id") @db.ObjectId
+  url        String   @unique
+  gridfsId   String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  exerciseId String   @unique
+}
+
+model TargetMuscle {
+  id       String     @id @default(cuid()) @map("_id")
+  muscle   String     @unique
+  exercise Exercise[]
+}
+
+model SecondaryMuscle {
+  id         String     @id @default(cuid()) @map("_id") @db.ObjectId
+  muscle     String     @unique
+  Exercise   Exercise[] @relation(fields: [exerciseId], references: [exerciseId])
+  exerciseId String[]   @db.ObjectId
+}
+
 enum UserRole {
   ADMIN
   USER
 }
+
+
