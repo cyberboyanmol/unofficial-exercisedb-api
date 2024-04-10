@@ -78,4 +78,7 @@ export class ConfigService implements Config {
   get isTest(): boolean {
     return this.NODE_ENV === 'test';
   }
+  get API_ROOT_URL(): string {
+    return this.configService.get<string>('API_ROOT_URL');
+  }
 }

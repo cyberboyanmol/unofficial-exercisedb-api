@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      /* Add your CSS styles here */
+      .container {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        padding: 10px;
+      }
+      .banner {
+        width: 100%;
+        height: auto;
+      }
+      .message {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+      .otp {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 40px;
+      }
+      .footer {
+        font-size: 14px;
+        margin-top: 40px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        class="banner"
+        src="https://i.imgur.com/twND8zP.png"
+        alt="Welcome Banner"
+      />
+      <div class="message">
+        <p>Welcome to ExerciseDB! We're excited to have you on board.</p>
+        <p>Here's your OTP:</p>
+      </div>
+      <div class="otp">
+        <p><%= otp %></p>
+      </div>
+      <p>Thank you for joining our community.</p>
+      <p class="footer">Best regards,<br />The ExerciseDB Team</p>
+    </div>
+  </body>
+</html>

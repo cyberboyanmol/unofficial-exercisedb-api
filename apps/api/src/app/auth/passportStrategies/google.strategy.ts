@@ -39,21 +39,20 @@ export class GoogleStrategy extends PassportStrategy(
   async validate(
     req,
     accessToken: string,
-
     refreshToken: string,
     googleProfile: googlePassport.Profile,
     done: googlePassport.VerifyCallback,
   ) {
     try {
-      console.log(googleProfile);
       const profile = {
         ...googleProfile._json,
         email: googleProfile.emails[0].value,
       };
       const parsedState = this.parseState(req);
 
-      console.log(req);
-
+      console.log(googleProfile);
+      console.log(profile);
+      console.log(parsedState);
       console.log({ accessToken });
       console.log({ refreshToken });
 
